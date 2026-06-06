@@ -7,11 +7,17 @@ import com.uhc.plugin.listeners.PlayerListener;
 import com.uhc.plugin.listeners.WorldListener;
 import com.uhc.plugin.managers.GameManager;
 import com.uhc.plugin.managers.ConfigManager;
+import com.uhc.plugin.managers.TeamManager;
+import com.uhc.plugin.stats.StatsManager;
+import com.uhc.plugin.stats.ScenarioManager;
 
 public class PaperUHCPlugin extends JavaPlugin {
 
     private GameManager gameManager;
     private ConfigManager configManager;
+    private TeamManager teamManager;
+    private StatsManager statsManager;
+    private ScenarioManager scenarioManager;
 
     @Override
     public void onEnable() {
@@ -23,14 +29,20 @@ public class PaperUHCPlugin extends JavaPlugin {
         configManager = new ConfigManager(this);
         configManager.loadConfig();
 
-        // Initialize game manager
-        gameManager = new GameManager(this);
+        // Initialize managers
+        statsManager = new StatsManager(this);
+        teamManager = new TeamManager(this);
+        scenarioManager = new ScenarioManager(this);
+        gameManager = new GameManager(this, teamManager, statsManager);
 
         // Register commands
         registerCommands();
 
         // Register listeners
         registerListeners();
+
+        // Register shutdown hook to save stats
+        Runtime.getRuntime().addShutdownHook(new Thread(statsManager::saveStats));
 
         getLogger().info("Paper UHC Plugin has been enabled!");
         getLogger().info("========================================");
@@ -46,16 +58,21 @@ public class PaperUHCPlugin extends JavaPlugin {
             gameManager.stopGame();
         }
 
+        // Save stats
+        if (statsManager != null) {
+            statsManager.saveStats();
+        }
+
         getLogger().info("Paper UHC Plugin has been disabled!");
         getLogger().info("========================================");
     }
 
     private void registerCommands() {
-        getCommand("uhc").setExecutor(new UHCCommand(this, gameManager));
+        getCommand("uhc").setExecutor(new UHCCommand(this, gameManager, teamManager, statsManager, scenarioManager));
     }
 
     private void registerListeners() {
-        Bukkit.getPluginManager().registerEvents(new PlayerListener(gameManager), this);
+        Bukkit.getPluginManager().registerEvents(new PlayerListener(gameManager, statsManager), this);
         Bukkit.getPluginManager().registerEvents(new WorldListener(gameManager), this);
     }
 
@@ -65,5 +82,17 @@ public class PaperUHCPlugin extends JavaPlugin {
 
     public ConfigManager getConfigManager() {
         return configManager;
+    }
+
+    public TeamManager getTeamManager() {
+        return teamManager;
+    }
+
+    public StatsManager getStatsManager() {
+        return statsManager;
+    }
+
+    public ScenarioManager getScenarioManager() {
+        return scenarioManager;
     }
 }
