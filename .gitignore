@@ -1,0 +1,25 @@
+# Maven
+target/
+*.jar
+*.war
+*.ear
+*.zip
+*.tar
+*.tar.gz
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Build
+*.class
+*.classpath
+*.project
+.settings/
+
+# Dependencies
+dependency-reduced-pom.xml

@@ -1,0 +1,19 @@
+# Paper UHC Plugin Configuration
+
+# Maximum number of players in a game
+max-players: 100
+
+# World border size (blocks from center)
+world-border-size: 5000
+
+# Spawn radius (blocks from spawn where PvP is disabled)
+spawn-radius: 200
+
+# Enable PvP in the game
+pvp-enabled: true
+
+# Amount of health to heal per golden apple
+heal-amount: 4
+
+# Message of the day
+motd: "Welcome to UHC!"

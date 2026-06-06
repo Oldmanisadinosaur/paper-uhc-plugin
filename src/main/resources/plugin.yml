@@ -1,0 +1,29 @@
+name: PaperUHC
+version: 1.0.0
+description: A comprehensive Ultra Hardcore (UHC) plugin for Paper servers
+main: com.uhc.plugin.PaperUHCPlugin
+api-version: 1.21
+
+commands:
+  uhc:
+    description: Main UHC command
+    usage: /<command> <start|stop|join|leave|config>
+    aliases: [uhcgame]
+  uhcadmin:
+    description: UHC Admin commands
+    usage: /<command> <reload|setworldborder|setspawnradius>
+    aliases: [uhca]
+
+permissions:
+  uhc.join:
+    description: Allow players to join UHC games
+    default: true
+  uhc.leave:
+    description: Allow players to leave UHC games
+    default: true
+  uhc.admin:
+    description: Admin permission for UHC commands
+    default: op
+  uhc.start:
+    description: Permission to start UHC games
+    default: op
